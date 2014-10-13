@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="UTF-8">
+      <title>Saveba.js Demo by Aurelio De Rosa</title>
+      <style>
+         body
+         {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 800px;
+            font-size: 20px;
+         }
+
+         img
+         {
+            max-width: 100%;
+         }
+
+         #images
+         {
+            margin: 5px 0;
+         }
+      </style>
+   </head>
+   <body>
+      <h1>Saveba.js Demo</h1>
+
+      <div id="images">
+         <img src="images/photo-1.jpg" alt="" class="ignore" />
+         <img src="images/photo-2.jpg" alt="" />
+         <img src="images/photo-3.jpg" alt="Very important photo" />
+         <img src="http://upload.wikimedia.org/wikipedia/commons/7/74/Earth_poster_large.jpg" alt="" />
+         <img src="http://upload.wikimedia.org/wikipedia/commons/4/4e/Pleiades_large.jpg" alt="" />
+      </div>
+
+      <div>
+         <a href="https://github.com/AurelioDeRosa/Saveba.js">Saveba.js</a> has been created by
+         <a href="http://www.audero.it">Aurelio De Rosa</a>
+         (<a href="https://twitter.com/AurelioDeRosa">@AurelioDeRosa</a>).
+      </div>
+
+      <script>
+         // Try to fake a slow connection
+         if ('connection' in window.navigator) {
+            window.navigator.connection.metered = true;
+         } else {
+            window.navigator.connection = {
+               type: 'bluetooth'
+            }
+         }
+      </script>
+      <script src="../src/saveba.js"></script>
+      <script>
+         // Ignore elements having class ignore
+         saveba.defaults.ignoredElements = document.getElementsByClassName('ignore');
+
+         // Only needed if the developer wants to allow the user to see the hidden images
+         // in case they have been hidden (highly recommended)
+         window.addEventListener('load', function() {
+            var hiddenResources = document.querySelectorAll('[data-saveba]').length;
+            if (hiddenResources) {
+               var restoreLink = document.createElement('a');
+               restoreLink.href = '#';
+               restoreLink.id = 'restore-button';
+               restoreLink.textContent = 'click here';
+               restoreLink.addEventListener('click', function(event) {
+                  event.preventDefault();
+                  event.target.parentNode.parentNode.removeChild(event.target.parentNode);
+                  saveba.destroy();
+               });
+
+               var restoreParagraph = document.createElement('p');
+               restoreParagraph.textContent = 'It seems you are running on a slow connection (simulated). ' +
+                       'To save you bandwidth, some images (' + hiddenResources + ') ' +
+                       'have been hidden. If you want to see them, ';
+               restoreParagraph.appendChild(restoreLink);
+
+               var images = document.getElementById('images');
+               images.parentNode.insertBefore(restoreParagraph, images);
+            }
+         });
+      </script>
+   </body>
+</html>
