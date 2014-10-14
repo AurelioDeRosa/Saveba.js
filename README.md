@@ -2,7 +2,7 @@
 
 [Saveba.js](https://github.com/AurelioDeRosa/Saveba.js) is a JavaScript library that, relying on the [Network Information API](http://w3c.github.io/netinfo/), tries to save bandwidth to users having a slow connection by removing unnecessary* resources (at the moment images only).
 
-*An explanation of what's considered an unnecessary resource can be found in the "[How does it works](#how-does-it-works)" section.
+*An explanation of what's considered an unnecessary resource can be found in the "[How does Saveba.js works](#how-does-savebajs-works)" section.
 
 ## Notes on Saveba.js ##
 
@@ -26,6 +26,7 @@ The `type` property returns the user agent's connection type and can assume one 
 * `unknown`
 
 ### Previous versions ###
+
 The [previous version of the specifications](https://github.com/w3c/netinfo/blob/2a5b119f2bab96e3707ac85a3bc3ddfe2e69e112/index.html) defined an interface that exposed only the `type` property described in section "[Notes on the Network Information API](#notes-on-the-network-information-api)". This version of the specifications is what most modern browsers (Chrome 38, Opera 25, Firefox 31+)  support, so it's the one developers can use today.
 
 The previous version superseded [the older specifications](http://www.w3.org/TR/2012/WD-netinfo-api-20121129/) that exposed two properties: `bandwidth` and `metered`. The first was a double representing an estimation of the current bandwidth in megabytes per second (MB/s), while the second was a Boolean that specified if the network connection of the device was subject to limitations. This even older version of the API is implemented in versions of Firefox prior to 31.
