@@ -2,7 +2,7 @@
 
 [Saveba.js](https://github.com/AurelioDeRosa/Saveba.js) is a JavaScript library that, relying on the [Network Information API](http://w3c.github.io/netinfo/), tries to save bandwidth to users having a slow connection by removing unnecessary* resources (at the moment images only).
 
-*An explanation of what's considered an unnecessary resource can be found in the "[How does Saveba.js works](#how-does-savebajs-works)" section.
+*An explanation of what's considered an unnecessary resource can be found in the "[How does Saveba.js work](#how-does-savebajs-work)" section.
 
 ## Notes on Saveba.js ##
 
@@ -45,7 +45,7 @@ The debate on this API is really open as demonstrated by the continue evolution 
 
 Whether you think it's worth or not, the current specifications are a mere W3C editor's draft, so there is still time to contribute to the discussion and provide your feedback.
 
-## How does Saveba.js works ##
+## How does Saveba.js work ##
 
 Saveba.js relies on the information exposed by the Network Information API (all versions but the newest because it isn't supported by any browser) to retrieve the information of the user's connection and replace zero or more resources (currently images only) with a placeholder, based on the connection in use. Resources that are already in the browser's cache are shown regardless of the type of connection.
 
