@@ -4,6 +4,9 @@
 
 *An explanation of what's considered an unnecessary resource can be found in the "[How does Saveba.js work](#how-does-savebajs-work)" section.
 
+## Demo ##
+To see Saveba.js in action you can take a look at the [live demo](http://aurelio.audero.it/demo/saveba.js/).
+
 ## Notes on Saveba.js ##
 
 This library is intended more as a proof-of-concept of what is possible to do using the Network Information API than something you should use on your website, at least at the moment. In the [demo](demo/index.html) provided in this repository, I show a possible use case for Saveba.js. Using the library, the demo removes unnecessary resources but also offers a way to load them in case the user wants to.
