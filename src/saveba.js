@@ -3,6 +3,10 @@
 var saveba = (function (window, document) {
    'use strict';
 
+   var connection = window.navigator.connection    ||
+                    window.navigator.mozConnection ||
+                    null;
+
    // Default values.
    // Later exposed as saveba.defaults
    var defaults = {
@@ -16,48 +20,64 @@ var saveba = (function (window, document) {
       fastMin: 2
    };
 
+   var ConnectionTypes = {
+      'SLOW_CONNECTION': 0,
+      'AVERAGE_CONNECTION': 1,
+      'FAST_CONNECTION': 2
+   };
+
    // The base64 encode of a transparent GIF used to replace
    // the "src" attribute of the targeted <img>s
    var transparentGif = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
-   var saveba = function() {
-      var connection = window.navigator.connection    ||
-                       window.navigator.mozConnection ||
-                       null;
+   function detectConnectionCategory() {
+      // Test whether the API supported is compliant with the old specifications
+      var oldApi = 'metered' in connection;
 
+      if (
+         (oldApi && (connection.metered || connection.bandwidth < defaults.slowMax)) ||
+         (!oldApi && (connection.type === 'bluetooth' || connection.type === 'cellular'))
+      ) {
+         return ConnectionTypes.SLOW_CONNECTION;
+      } else if (
+         oldApi && !connection.metered &&
+         connection.bandwidth >= defaults.slowMax &&
+         connection.bandwidth < defaults.fastMin
+      ) {
+         return ConnectionTypes.AVERAGE_CONNECTION;
+      } else {
+         return ConnectionTypes.FAST_CONNECTION;
+      }
+   }
+
+   var saveba = function() {
       // API not supported. Can't optimize the website
       if (!connection) {
          return false;
       }
 
-      // Test whether the API supported is compliant with the old specifications
-      var oldApi = 'metered' in connection;
-      var slowConnection = (oldApi && (connection.metered || connection.bandwidth < defaults.slowMax)) ||
-         (!oldApi && (connection.type === 'bluetooth' || connection.type === 'cellular'));
-      var averageConnection = oldApi &&
-         !connection.metered &&
-         connection.bandwidth >= defaults.slowMax &&
-         connection.bandwidth < defaults.fastMin;
+      // Convert the ignoredElements property into an actual Array if it isn't
+      if (!(defaults.ignoredElements instanceof Array)) {
+         defaults.ignoredElements = [].slice.apply(defaults.ignoredElements);
+      }
+
+      var connectionType = detectConnectionCategory();
 
       // The connection is fast enough to load all the resources specified,
       // the type of the connection used is unknown, or there is no connection at all
-      if (!slowConnection && !averageConnection) {
+      if (connectionType === ConnectionTypes.FAST_CONNECTION) {
          return true;
       }
 
       var elements;
-      if (slowConnection) {
+      if (connectionType === ConnectionTypes.SLOW_CONNECTION) {
          // Select all images (non-content images and content images)
          elements = document.querySelectorAll('img');
-      } else if (averageConnection) {
+      } else if (connectionType === ConnectionTypes.AVERAGE_CONNECTION) {
          // Select non-content images only
          elements = document.querySelectorAll('img[alt=""]');
       }
       elements = [].slice.call(elements);
-
-      if (!(defaults.ignoredElements instanceof Array)) {
-         defaults.ignoredElements = [].slice.apply(defaults.ignoredElements);
-      }
 
       // Filter the resources specified in the ignoredElements property and
       // those that are in the browser's cache.
