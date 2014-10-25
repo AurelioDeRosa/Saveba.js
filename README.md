@@ -82,7 +82,7 @@ That's it!
 
 The library will do its work and expose a global object called `saveba`, available as a property of the `window` object.
 
-### `destroy()` ###
+### `destroy([elements])` ###
 
 For the reasons described in the [Criticisms](#criticisms) section, Saveba.js is far from being perfect and 100% reliable. Therefore, you may want to remove the effect of this library allowing a user on a detected slow or average connection to see all the resources of the web page. To achieve this goal, you can invoke the `destroy()` method of the `saveba` object.
 
@@ -92,6 +92,26 @@ Let's say that the page has a button whose ID is `restore-resources`. You can ad
 <script>
 document.getElementById('restore-resources').addEventListener('click', function(event) {
    saveba.destroy();
+});
+</script>
+```
+
+Alternatively, if you want to remove the changes of the library on a specific element or a collection of elements you can pass either the element or the collection to `destroy()` as shown below:
+
+```
+<script>
+document.getElementById('restore-resources').addEventListener('click', function(event) {
+   saveba.destroy(document.getElementById('image-1'));
+});
+</script>
+```
+
+or even:
+
+```
+<script>
+document.getElementById('restore-resources').addEventListener('click', function(event) {
+   saveba.destroy(document.querySelectorAll('img'));
 });
 </script>
 ```

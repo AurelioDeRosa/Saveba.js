@@ -95,9 +95,19 @@ var saveba = (function (window, document) {
       return true;
    };
 
-    var destroy = function() {
-       // Retrieve all the hidden images
-       var elements = [].slice.call(document.querySelectorAll('[data-saveba]'));
+    var destroy = function(elements) {
+       // If the method is called without the parameter,
+       // it acts upon all the modified elements.
+       // Otherwise it converts the given parameter into
+       // an actual array.
+       if (!elements) {
+          // Retrieve all the hidden images
+          elements = [].slice.call(document.querySelectorAll('[data-saveba]'));
+       } else if (elements instanceof Element) {
+          elements = [elements];
+       } else if (!(elements instanceof Array)) {
+          elements = [].slice.call(elements);
+       }
 
        // Restore the src attribute and remove the data-saveba attribute
        for(var i = 0; i < elements.length; i++) {

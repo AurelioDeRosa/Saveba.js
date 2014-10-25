@@ -27,11 +27,23 @@
       <h1>Saveba.js Demo</h1>
 
       <div id="images">
-         <img src="images/photo-1.jpg" alt="" class="ignore" />
-         <img src="images/photo-2.jpg" alt="" />
-         <img src="images/photo-3.jpg" alt="Very important photo" />
-         <img src="http://upload.wikimedia.org/wikipedia/commons/7/74/Earth_poster_large.jpg" alt="" />
-         <img src="http://upload.wikimedia.org/wikipedia/commons/4/4e/Pleiades_large.jpg" alt="" />
+         <p>
+            London is the capital city of England and the United Kingdom. It is the most populous city in the United
+            Kingdom with a metropolitan area of over 13 million inhabitants. One of its main attraction is the
+            Big Ben, which is the nickname for the Great Bell of the clock at the north end of the Palace of
+            Westminster. A photo of the Big Ben can be seen below:
+         </p>
+         <img id="image-1" src="images/photo-1.jpg" alt="" class="ignore" />
+         <p>
+            Barcelona is the capital city of the autonomous community of Catalonia in Spain and the country's 2nd
+            largest city, with a population of 1.6 million within its administrative limits. One of the main attraction
+            of this city is the Park Güell. From this park you can see a well-known sign, reading "Okupa y resiste",
+            of a squat and anarchist center. An image of such sign is shown below:
+         </p>
+         <img id="image-2" src="images/photo-2.jpg" alt="Sign of Okupa y resiste in Barcelona" />
+         <img id="image-3" src="images/photo-3.jpg" alt="" />
+         <img id="image-4" src="http://upload.wikimedia.org/wikipedia/commons/7/74/Earth_poster_large.jpg" alt="" />
+         <img id="image-5" src="http://upload.wikimedia.org/wikipedia/commons/4/4e/Pleiades_large.jpg" alt="" />
       </div>
 
       <div>
@@ -60,9 +72,11 @@
          window.addEventListener('load', function() {
             var hiddenResources = document.querySelectorAll('[data-saveba]').length;
             if (hiddenResources) {
-               var restoreLink = document.createElement('a');
+               var restoreLink, restoreParagraph, images;
+
+               // Code to restore all images at once
+               restoreLink = document.createElement('a');
                restoreLink.href = '#';
-               restoreLink.id = 'restore-button';
                restoreLink.textContent = 'click here';
                restoreLink.addEventListener('click', function(event) {
                   event.preventDefault();
@@ -70,13 +84,31 @@
                   saveba.destroy();
                });
 
-               var restoreParagraph = document.createElement('p');
+               restoreParagraph = document.createElement('p');
                restoreParagraph.textContent = 'It seems you are running on a slow connection (simulated). ' +
                        'To save you bandwidth, some images (' + hiddenResources + ') ' +
-                       'have been hidden. If you want to see them, ';
+                       'have been hidden. If you want to load them all, ';
                restoreParagraph.appendChild(restoreLink);
 
-               var images = document.getElementById('images');
+               images = document.getElementById('images');
+               images.parentNode.insertBefore(restoreParagraph, images);
+
+               // Code to restore a specific set of images
+               images = document.getElementById('image-2');
+
+               restoreLink = document.createElement('a');
+               restoreLink.href = '#';
+               restoreLink.textContent = 'click here';
+               restoreLink.addEventListener('click', function(event) {
+                  event.preventDefault();
+                  event.target.parentNode.parentNode.removeChild(event.target.parentNode);
+                  saveba.destroy(images);
+               });
+
+               restoreParagraph = document.createElement('p');
+               restoreParagraph.textContent = 'To show the image below ';
+               restoreParagraph.appendChild(restoreLink);
+
                images.parentNode.insertBefore(restoreParagraph, images);
             }
          });
