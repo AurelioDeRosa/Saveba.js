@@ -74,7 +74,7 @@ The library does nothing also in case of an absent (`none`), unknown (`unknown`)
 
 To use Saveba.js, download the JavaScript file contained in the "src" folder and include it in your web page.
 
-```
+```html
 <script src="path/to/saveba.js"></script>
 ```
 
@@ -88,7 +88,7 @@ For the reasons described in the [Criticisms](#criticisms) section, Saveba.js is
 
 Let's say that the page has a button whose ID is `restore-resources`. You can add an event listener to the click event that restores all the resources as shown below:
 
-```
+```html
 <script>
 document.getElementById('restore-resources').addEventListener('click', function(event) {
    saveba.destroy();
@@ -98,7 +98,7 @@ document.getElementById('restore-resources').addEventListener('click', function(
 
 Alternatively, if you want to remove the changes of the library on a specific element or a collection of elements you can pass either the element or the collection to `destroy()` as shown below:
 
-```
+```html
 <script>
 document.getElementById('restore-resources').addEventListener('click', function(event) {
    saveba.destroy(document.getElementById('image-1'));
@@ -108,7 +108,7 @@ document.getElementById('restore-resources').addEventListener('click', function(
 
 or even:
 
-```
+```html
 <script>
 document.getElementById('restore-resources').addEventListener('click', function(event) {
    saveba.destroy(document.querySelectorAll('img'));
@@ -126,7 +126,7 @@ Saveba.js has few options you can set after you've included the library. The opt
 
 Let's say that you want to avoid the optimizations for all the elements having class `ignore`, you can write in your pages:
 
-```
+```html
 <script src="path/to/saveba.js"></script>
 <script>
    saveba.defaults.ignoredElements = document.getElementsByClassName('ignore');
