@@ -123,7 +123,7 @@ var saveba = (function (window, document) {
    saveba.destroy = destroy;
 
    // Run the function when the DOM is ready
-   window.addEventListener('DOMContentLoaded', saveba);
+   document.addEventListener('DOMContentLoaded', saveba);
 
    return saveba;
 
