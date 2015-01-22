@@ -121,8 +121,8 @@ document.getElementById('restore-resources').addEventListener('click', function(
 Saveba.js has few options you can set after you've included the library. The options are exposed through the `defaults` property of `saveba` and are:
 
 * `ignoredElements` (`Array` or `NodeList`. Default: `[]`): A set of elements the library must ignore;
-* `slowMax` (`Number`. Default: `0.5`): The maximum speed after which a connection isn't considered slow anymore;
-* `fastMin` (`Number`. Default: `2`): The minimum speed a connection must have to be considered fast.
+* `slowMax` (`Number`. Default: `0.5`): The maximum speed in MB/s after which a connection isn't considered slow anymore;
+* `fastMin` (`Number`. Default: `2`): The minimum speed in MB/s a connection must have to be considered fast.
 
 Let's say that you want to avoid the optimizations for all the elements having class `ignore`, you can write in your pages:
 
