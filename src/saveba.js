@@ -3,50 +3,66 @@
 var saveba = (function (window, document) {
    'use strict';
 
+   // Deal with the prefixed connection object exposed in Firefox
    var connection = window.navigator.connection    ||
                     window.navigator.mozConnection ||
                     null;
+
+   // If the connection object is exposed, create an object that unifies
+   // all the versions of the Network Information API's specifications
+   if (connection !== null) {
+      connection = {
+         metered: !!connection.metered,
+         // The value of downlinkMax is expressed in Megabits per second,
+         // so it needs to be converted in Megabytes per second
+         speed: 'downlinkMax' in connection ? connection.downlinkMax / 8 :
+            'bandwidth' in connection ? connection.bandwidth : Infinity,
+         type: connection.type
+      };
+   }
 
    // Default values.
    // Later exposed as saveba.defaults
    var defaults = {
       // A NodeList or an Array of elements the library must ignore
       ignoredElements: [],
-      // A Number specifying the maximum speed in MB/s after which
-      // a connection isn't considered slow anymore
+      // A Number specifying the maximum speed in MB/s (Megabytes per second)
+      // after which a connection isn't considered slow anymore
       slowMax: 0.5,
-      // A Number specifying the minimum speed in MB/s after which
-      // a connection is considered fast
+      // A Number specifying the minimum speed in MB/s (Megabytes per second)
+      // after which a connection is considered fast
       fastMin: 2
    };
 
+   // Define the constants for the different connection types used by the library
    var ConnectionTypes = {
-      'SLOW_CONNECTION': 0,
-      'AVERAGE_CONNECTION': 1,
-      'FAST_CONNECTION': 2
+      NONE: 0,
+      SLOW: 1,
+      AVERAGE: 2,
+      FAST: 3
    };
 
    // The base64 encode of a transparent GIF used to replace
    // the "src" attribute of the targeted <img>s
    var transparentGif = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
-   function detectConnectionCategory() {
-      // Test whether the API supported is compliant with the old specifications
-      var oldApi = 'metered' in connection;
-
-      if (
-         (oldApi && (connection.metered || connection.bandwidth < defaults.slowMax)) ||
-         (!oldApi && (connection.type === 'bluetooth' || connection.type === 'cellular'))
-      ) {
-         return ConnectionTypes.SLOW_CONNECTION;
+   // The function that starting from the local connection object categorizes the connection
+   function categorizeConnection() {
+      if (connection.type === 'none') {
+         return ConnectionTypes.NONE;
       } else if (
-         oldApi && !connection.metered &&
-         connection.bandwidth >= defaults.slowMax &&
-         connection.bandwidth < defaults.fastMin
+         connection.metered ||
+         connection.speed < defaults.slowMax ||
+         (connection.type === 'bluetooth' || connection.type === 'cellular')
       ) {
-         return ConnectionTypes.AVERAGE_CONNECTION;
+         return ConnectionTypes.SLOW;
+      } else if (
+         !connection.metered &&
+         connection.speed >= defaults.slowMax && connection.speed < defaults.fastMin
+      ) {
+         return ConnectionTypes.AVERAGE;
       } else {
-         return ConnectionTypes.FAST_CONNECTION;
+         return ConnectionTypes.FAST;
       }
    }
 
@@ -56,24 +72,24 @@ var saveba = (function (window, document) {
          return false;
       }
 
+      var connectionType = categorizeConnection();
+
+      // The connection is fast enough to load all the resources specified,
+      // the type of the connection used is unknown, or there is no connection at all
+      if (connectionType === ConnectionTypes.NONE || connectionType === ConnectionTypes.FAST) {
+         return true;
+      }
+
       // Convert the ignoredElements property into an actual Array if it isn't
       if (!(defaults.ignoredElements instanceof Array)) {
          defaults.ignoredElements = [].slice.apply(defaults.ignoredElements);
       }
 
-      var connectionType = detectConnectionCategory();
-
-      // The connection is fast enough to load all the resources specified,
-      // the type of the connection used is unknown, or there is no connection at all
-      if (connectionType === ConnectionTypes.FAST_CONNECTION) {
-         return true;
-      }
-
       var elements;
-      if (connectionType === ConnectionTypes.SLOW_CONNECTION) {
+      if (connectionType === ConnectionTypes.SLOW) {
          // Select all images (non-content images and content images)
          elements = document.querySelectorAll('img');
-      } else if (connectionType === ConnectionTypes.AVERAGE_CONNECTION) {
+      } else if (connectionType === ConnectionTypes.AVERAGE) {
          // Select non-content images only
          elements = document.querySelectorAll('img[alt=""]');
       }
