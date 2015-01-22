@@ -1,4 +1,4 @@
-# 0.2.0 #
+# 0.2.0 (22-01-2015) #
 
 * [!] Support the latest version of the specifications ([#2][])
 * [!] `destroy()` accepts one or more elements on which the changes applied by the library have to removed ([#3])
