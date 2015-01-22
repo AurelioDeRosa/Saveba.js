@@ -1,0 +1,28 @@
+{
+  "name": "saveba-js",
+  "version": "0.1.0",
+  "main": "src/saveba.js",
+  "author": {
+    "name": "Aurelio De Rosa",
+    "email": "a.derosa@audero.it",
+    "web": "http://www.audero.it"
+  },
+  "description": "A JavaScript library that, relying on the Network Information API, tries to save bandwidth to users having a slow connection by removing unnecessary resources.",
+  "keywords": [
+    "javascript",
+    "library",
+    "performance",
+    "optimization",
+    "bandwidth",
+    "connection",
+    "mobile"
+  ],
+  "license": [
+    "MIT",
+    "GPL-3.0"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules"
+  ]
+}
