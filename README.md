@@ -36,10 +36,12 @@ The `type` property returns the user agent's connection type and can assume one 
 * `bluetooth`
 * `cellular`
 * `ethernet`
+* `mixed`
 * `none`
-* `wifi`
 * `other`
 * `unknown`
+* `wifi`
+* `wimax`
 
 ### Previous versions
 
