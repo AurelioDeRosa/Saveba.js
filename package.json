@@ -1,6 +1,6 @@
 {
   "name": "saveba-js",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A JavaScript library that, relying on the Network Information API, tries to save bandwidth to users having a slow connection by removing unnecessary resources.",
   "main": "src/saveba.js",
   "repository": {

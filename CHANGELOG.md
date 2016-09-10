@@ -1,4 +1,4 @@
-# Next
+# 0.3.0 (10-09-2016)
 
 - [!] Implement UMD pattern  ([#4][])
 - Improved the way slow connections are detected
