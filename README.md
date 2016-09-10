@@ -1,5 +1,7 @@
 # Saveba.js
 
+[![Code Climate](https://codeclimate.com/github/AurelioDeRosa/Saveba.js/badges/gpa.svg)](https://codeclimate.com/github/AurelioDeRosa/Saveba.js)
+
 [Saveba.js](https://github.com/AurelioDeRosa/Saveba.js) is a JavaScript library that, relying on
 the [Network Information API](https://wicg.github.io/netinfo/), tries to save bandwidth to users having a slow
 connection by removing unnecessary* resources (at the moment images only).
