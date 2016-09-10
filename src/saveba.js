@@ -1,4 +1,3 @@
-/* jshint browser: true */
 /* exported saveba */
 var saveba = (function (window, document) {
    'use strict';
