@@ -20,7 +20,9 @@
    "nonbsp": true,
    "nonew": true,
    "notypeof": false,
-   "predef": [],
+   "predef": [
+      "define"
+   ],
    "shadow": "inner",
    "singleGroups": true,
    "strict": true,

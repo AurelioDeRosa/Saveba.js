@@ -1,5 +1,19 @@
-/* exported saveba */
-var saveba = (function (window, document) {
+(function (root, factory) {
+   'use strict';
+
+   if (typeof define === 'function' && define.amd) {
+      // AMD. Register as an anonymous module.
+      define([], factory);
+   } else if (typeof module === 'object' && module.exports) {
+      // Node. Does not work with strict CommonJS, but
+      // only CommonJS-like environments that support module.exports,
+      // like Node.
+      module.exports = factory();
+   } else {
+      // Browser globals (root is window)
+      root.saveba = factory();
+   }
+} (this, function () {
    'use strict';
 
    // Deal with the prefixed connection object exposed in Firefox
@@ -45,22 +59,37 @@ var saveba = (function (window, document) {
    // the "src" attribute of the targeted <img>s
    var transparentGif = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
-   // The function that starting from the local connection object categorizes the connection
-   function categorizeConnection() {
+   /**
+    * Checks if the connection is slow
+    *
+    * @param {Object} connection The connection to test
+    * @param {Object} settings The object containing the settings of the user
+    *
+    * @returns {boolean} true if the connection is slow; false otherwise
+    */
+   function isSlowConnection(connection, settings) {
+      return connection.metered ||
+         connection.speed < settings.slowMax ||
+         connection.speed === Infinity &&
+         (connection.type === 'bluetooth' || connection.type === 'cellular');
+   }
+
+   /**
+    * Categorizes the connection based on the connection object
+    *
+    * @param {Object} connection The connection to test
+    * @param {Object} settings The object containing the settings of the user
+    *
+    * @returns {number} the connection type
+    */
+   function categorizeConnection(connection, settings) {
       if (connection.type === 'none') {
          return ConnectionTypes.NONE;
-      } else if (
-         connection.metered ||
-         connection.speed < defaults.slowMax ||
-         (
-            connection.speed === Infinity &&
-            (connection.type === 'bluetooth' || connection.type === 'cellular')
-         )
-      ) {
+      } else if (isSlowConnection(connection, settings)) {
          return ConnectionTypes.SLOW;
       } else if (
          !connection.metered &&
-         connection.speed >= defaults.slowMax && connection.speed < defaults.fastMin
+         connection.speed >= settings.slowMax && connection.speed < settings.fastMin
       ) {
          return ConnectionTypes.AVERAGE;
       } else {
@@ -68,13 +97,44 @@ var saveba = (function (window, document) {
       }
    }
 
-   var saveba = function() {
+   /**
+    * Retrieves the elements to process based on the connection type
+    * and the user settings
+    *
+    * @param {Object} connection The connection to test
+    * @param {Object} settings The object containing the settings of the user
+    *
+    * @returns {HTMLElement[]} The elements to process
+    */
+   function getElements(connection, settings) {
+      var connectionType = categorizeConnection(connection, settings);
+      var elements;
+
+      if (connectionType === ConnectionTypes.SLOW) {
+         // Select all images (non-content images and content images)
+         elements = document.querySelectorAll('img');
+      } else if (connectionType === ConnectionTypes.AVERAGE) {
+         // Select non-content images only
+         elements = document.querySelectorAll('img[alt=""]');
+      }
+
+      elements = [].slice.call(elements);
+
+      // Filter the resources specified in the ignoredElements property and
+      // those that are in the browser's cache.
+      // More info: http://stackoverflow.com/questions/7844982/using-image-complete-to-find-if-image-is-cached-on-chrome
+      return elements.filter(function (element) {
+         return settings.ignoredElements.indexOf(element) === -1 ? !element.complete : false;
+      });
+   }
+
+   function saveba() {
       // API not supported. Can't optimize the website
       if (!connection) {
          return false;
       }
 
-      var connectionType = categorizeConnection();
+      var connectionType = categorizeConnection(connection, defaults);
 
       // The connection is fast enough to load all the resources specified,
       // the type of the connection used is unknown, or there is no connection at all
@@ -87,52 +147,36 @@ var saveba = (function (window, document) {
          defaults.ignoredElements = [].slice.apply(defaults.ignoredElements);
       }
 
-      var elements;
-      if (connectionType === ConnectionTypes.SLOW) {
-         // Select all images (non-content images and content images)
-         elements = document.querySelectorAll('img');
-      } else if (connectionType === ConnectionTypes.AVERAGE) {
-         // Select non-content images only
-         elements = document.querySelectorAll('img[alt=""]');
-      }
-      elements = [].slice.call(elements);
-
-      // Filter the resources specified in the ignoredElements property and
-      // those that are in the browser's cache.
-      // More info: http://stackoverflow.com/questions/7844982/using-image-complete-to-find-if-image-is-cached-on-chrome
-      elements = elements.filter(function(element) {
-         return defaults.ignoredElements.indexOf(element) === -1 ? !element.complete : false;
-      });
-
       // Replace the targeted resources with a 1x1 px, transparent GIF
-      for(var i = 0; i < elements.length; i++) {
-         elements[i].dataset.saveba = elements[i].src;
-         elements[i].src = transparentGif;
-      }
+      getElements(connection, defaults)
+         .forEach(function (element) {
+            element.dataset.saveba = element.src;
+            element.src = transparentGif;
+         });
 
       return true;
-   };
+   }
 
-    var destroy = function(elements) {
-       // If the method is called without the parameter,
-       // it acts upon all the modified elements.
-       // Otherwise it converts the given parameter into
-       // an actual array.
-       if (!elements) {
-          // Retrieve all the hidden images
-          elements = [].slice.call(document.querySelectorAll('[data-saveba]'));
-       } else if (elements instanceof Element) {
-          elements = [elements];
-       } else if (!(elements instanceof Array)) {
-          elements = [].slice.call(elements);
-       }
+   function destroy(elements) {
+      // If the method is called without the parameter,
+      // it acts upon all the modified elements.
+      // Otherwise it converts the given parameter into
+      // an actual array.
+      if (!elements) {
+         // Retrieve all the hidden images
+         elements = [].slice.call(document.querySelectorAll('[data-saveba]'));
+      } else if (elements instanceof Element) {
+         elements = [elements];
+      } else if (!(elements instanceof Array)) {
+         elements = [].slice.call(elements);
+      }
 
-       // Restore the src attribute and remove the data-saveba attribute
-       for(var i = 0; i < elements.length; i++) {
-          elements[i].src = elements[i].dataset.saveba;
-          delete elements[i].dataset.saveba;
-       }
-    };
+      // Restore the src attribute and remove the data-saveba attribute
+      for (var i = 0; i < elements.length; i++) {
+         elements[i].src = elements[i].dataset.saveba;
+         delete elements[i].dataset.saveba;
+      }
+   }
 
    // Expose the object containing the default values
    saveba.defaults = defaults;
@@ -145,4 +189,4 @@ var saveba = (function (window, document) {
 
    return saveba;
 
-})(window, document);
+}));
