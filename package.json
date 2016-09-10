@@ -1,12 +1,37 @@
 {
   "name": "saveba-js",
   "version": "0.2.0",
+  "description": "A JavaScript library that, relying on the Network Information API, tries to save bandwidth to users having a slow connection by removing unnecessary resources.",
+  "main": "src/saveba.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AurelioDeRosa/Saveba.js.git"
+  },
+  "keywords": [
+    "performance",
+    "optimization",
+    "bandwidth",
+    "connection",
+    "mobile",
+    "javascript",
+    "library",
+    "umd"
+  ],
   "author": {
     "name": "Aurelio De Rosa",
     "email": "a.derosa@audero.it",
-    "web": "http://www.audero.it"
+    "web": "https://www.audero.it"
   },
-  "description": "A JavaScript library that, relying on the Network Information API, tries to save bandwidth to users having a slow connection by removing unnecessary resources.",
+  "contributors": [
+    {
+      "name": "Aurelio De Rosa",
+      "email": "a.derosa@audero.it",
+      "web": "https://www.audero.it"
+    }
+  ],
+  "license": "(MIT OR GPL-3.0)",
+  "bugs": "https://github.com/AurelioDeRosa/Saveba.js/issues",
+  "homepage": "https://github.com/AurelioDeRosa/Saveba.js",
   "dependencies": {},
   "devDependencies": {
     "grunt": "^1.0.1",
