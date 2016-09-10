@@ -21,7 +21,7 @@ resources but also offers a way to load them in case the user wants to.
 ## Notes on the Network Information API
 
 The current specifications of the [Network Information API](https://wicg.github.io/netinfo/) integrates the
-[previous version](https://github.com/w3c/netinfo/blob/2a5b119f2bab96e3707ac85a3bc3ddfe2e69e112/index.html)
+[previous version](https://github.com/wicg/netinfo/blob/2a5b119f2bab96e3707ac85a3bc3ddfe2e69e112/index.html)
 (more details in section "[Previous versions](#previous-versions)") and try to address all the
 [criticisms](#criticisms) directed to the previous proposal. This version adds a `downlinkMax` property to the
 already defined `type` property, exposed through the `window.navigator` object.
@@ -43,7 +43,7 @@ The `type` property returns the user agent's connection type and can assume one 
 
 ### Previous versions
 
-The [previous version of the specifications](https://github.com/w3c/netinfo/blob/2a5b119f2bab96e3707ac85a3bc3ddfe2e69e112/index.html) defined an interface
+The [previous version of the specifications](https://github.com/wicg/netinfo/blob/2a5b119f2bab96e3707ac85a3bc3ddfe2e69e112/index.html) defined an interface
 that exposed only the `type` property described in section "[Notes on the Network Information API](#notes-on-the-network-information-api)". This version of the specifications is what most modern browsers
 (Chrome 38, Opera 25, Firefox 31+)  support, so it's the one developers can use today.
 
