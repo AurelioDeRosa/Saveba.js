@@ -52,7 +52,10 @@ var saveba = (function (window, document) {
       } else if (
          connection.metered ||
          connection.speed < defaults.slowMax ||
-         (connection.type === 'bluetooth' || connection.type === 'cellular')
+         (
+            connection.speed === Infinity &&
+            (connection.type === 'bluetooth' || connection.type === 'cellular')
+         )
       ) {
          return ConnectionTypes.SLOW;
       } else if (
