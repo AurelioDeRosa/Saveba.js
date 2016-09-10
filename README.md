@@ -9,7 +9,7 @@ connection by removing unnecessary* resources (at the moment images only).
 
 ## Demo
 
-To see Saveba.js in action you can take a look at the [live demo](http://aurelio.audero.it/demo/saveba.js/).
+To see Saveba.js in action you can take a look at the [live demo](https://www.audero.it/demo/saveba.js/).
 
 ## Notes on Saveba.js
 
