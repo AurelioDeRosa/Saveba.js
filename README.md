@@ -1,7 +1,7 @@
 # Saveba.js
 
 [Saveba.js](https://github.com/AurelioDeRosa/Saveba.js) is a JavaScript library that, relying on
-the [Network Information API](http://w3c.github.io/netinfo/), tries to save bandwidth to users having a slow
+the [Network Information API](https://wicg.github.io/netinfo/), tries to save bandwidth to users having a slow
 connection by removing unnecessary* resources (at the moment images only).
 
 *An explanation of what's considered an unnecessary resource can be found in the
@@ -20,7 +20,7 @@ resources but also offers a way to load them in case the user wants to.
 
 ## Notes on the Network Information API
 
-The current specifications of the [Network Information API](http://w3c.github.io/netinfo/) integrates the
+The current specifications of the [Network Information API](https://wicg.github.io/netinfo/) integrates the
 [previous version](https://github.com/w3c/netinfo/blob/2a5b119f2bab96e3707ac85a3bc3ddfe2e69e112/index.html)
 (more details in section "[Previous versions](#previous-versions)") and try to address all the
 [criticisms](#criticisms) directed to the previous proposal. This version adds a `downlinkMax` property to the
@@ -29,7 +29,7 @@ already defined `type` property, exposed through the `window.navigator` object.
 The `downlinkMax` property represents the maximum downlink speed, in megabits per second (Mbps). Some examples
 of values are: `2` for an UMTS connection, `10` for an Ethernet connection, and `100` for an LTE
 connection. You can find more values in the
-[table of maximum downlink speeds](http://w3c.github.io/netinfo/#max-downlink-table) reported in the specifications.
+[table of maximum downlink speeds](https://wicg.github.io/netinfo/#max-downlink-table) reported in the specifications.
 
 The `type` property returns the user agent's connection type and can assume one of the following values:
 
@@ -176,7 +176,7 @@ Let's say that you want to avoid the optimizations for all the elements having c
 
 ## Browsers supported
 
-Saveba.js uses the [Network Information API](http://w3c.github.io/netinfo/), so it works in the same browsers
+Saveba.js uses the [Network Information API](https://wicg.github.io/netinfo/), so it works in the same browsers
 that support this API, and specifically:
 
 - Firefox 30+. Prior to Firefox 31, the browser supports the oldest version of the API. In Firefox 31 the API [has been disabled on desktop](https://developer.mozilla.org/en-US/Firefox/Releases/31/Site_Compatibility)
